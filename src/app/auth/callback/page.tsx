@@ -2,7 +2,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 // import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 import { checkAuthStatus } from "./actions";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { useRouter } from "next/navigation";
@@ -12,10 +12,21 @@ const Page = () => {
 
   const { user } = useKindeBrowserClient();
 
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ["checkAuthStatus"],
     queryFn: async () => await checkAuthStatus(),
   });
+
+  useEffect(() => {
+    const stripePaymentLink = localStorage.getItem("Stripe_Payment_Link");
+
+    if (data?.success && stripePaymentLink && user?.email) {
+      localStorage.removeItem("Stripe_Payment_Link"); // remove that link from localstorage, once it's work is done
+      router?.push(stripePaymentLink + `?prefilled_email=${user?.email}`);
+    } else if (data?.success === false) {
+      router?.push("/");
+    }
+  }, [router, data, user]);
 
   if (data?.success) router.push("/");
 
