@@ -20,7 +20,7 @@ enum Plan {
 }
 
 enum SubscriptionPeriod {
-  monthy
+  monthly
   yearly
 }
 
@@ -32,14 +32,14 @@ model User {
   plan       Plan    @default(free)
   customerId String? @unique // Stripe customer ID, this will be important when we need to delete the subscription
 
-  Subscription Subsciption?
+  Subscription Subscription?
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   subsciptionId String?
 }
 
-model Subsciption {
+model Subscription {
   id     String             @id @default(cuid()) @map("_id")
   userId String             @unique
   plan   Plan
