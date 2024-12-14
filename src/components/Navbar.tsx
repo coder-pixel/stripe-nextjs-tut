@@ -4,7 +4,6 @@ import {
   NavigationMenuItem,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
 import { LogOut } from "lucide-react";
 import { ModeToggle } from "./ModeToggle";
@@ -31,10 +30,15 @@ const routeList: RouteProps[] = [
   },
 ];
 
-export const Navbar = () => {
+type NavbarProps = {
+  isAuthenticated: any;
+};
+
+export const Navbar = ({ isAuthenticated }: NavbarProps) => {
   const isSubscribed = true;
   // const isAuthenticated = true;
-  const { isAuthenticated } = getKindeServerSession();
+
+  console.log({ isAuthenticated });
   return (
     <header
       className="sticky border-b-[1px] top-0 z-40 w-full  dark:border-b-slate-700 overflow-x-hidden
